@@ -36,9 +36,9 @@ CREATE TABLE Planetas (
     coordenadaX INT NOT NULL,
     coordenadaY INT NOT NULL,
     superficie INT NOT NULL,
-    galaxia_id INT NOT NULL,
+    id_galaxia INT NOT NULL,
     jugador_id INT NOT NULL,
-    FOREIGN KEY (galaxia_id) REFERENCES Galaxias(id),
+    FOREIGN KEY (id_galaxia) REFERENCES Galaxias(id),
     FOREIGN KEY (jugador_id) REFERENCES Jugadores(id)
 );
 
@@ -50,25 +50,25 @@ CREATE TABLE Recursos (
 CREATE TABLE Naves (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
-    costo_r1 INT NOT NULL,
-    costo_r2 INT NOT NULL,
-    costo_r3 INT NOT NULL
+    costo_metal INT NOT NULL,
+    costo_cristal INT NOT NULL,
+    costo_energia INT NOT NULL
 );
 
 CREATE TABLE Armamentos (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
-    costo_r1 INT NOT NULL,
-    costo_r2 INT NOT NULL,
-    costo_r3 INT NOT NULL
+    costo_metal INT NOT NULL,
+    costo_cristal INT NOT NULL,
+    costo_energia INT NOT NULL
 );
 
 CREATE TABLE Edificios (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(120) NOT NULL,
-    costo_r1 INT NOT NULL,
-    costo_r2 INT NOT NULL,
-    costo_r3 INT NOT NULL
+    costo_metal INT NOT NULL,
+    costo_cristal INT NOT NULL,
+    costo_energia INT NOT NULL
 );
 
 CREATE TABLE Lunas (
@@ -131,7 +131,7 @@ INSERT INTO Galaxias (nombre, sector) VALUES
 ('Orion', 'Delta'),
 ('Centaurus', 'Epsilon');
 
-INSERT INTO Planetas (nombre, coordenadaX, coordenadaY, superficie, galaxia_id, jugador_id) VALUES
+INSERT INTO Planetas (nombre, coordenadaX, coordenadaY, superficie, id_galaxia, jugador_id) VALUES
 (
     'Nova Prime', 10, 20, 108728,
     (SELECT id FROM Galaxias WHERE nombre = 'Milky Way'),
@@ -200,7 +200,7 @@ INSERT INTO Lunas (nombre, superficie, planeta_id) VALUES
 ('StellarDust II', 2033, 9),
 ('MoonlightGrove II', 1578, 10);
 
-INSERT INTO Naves (nombre, costo_r1, costo_r2, costo_r3) VALUES
+INSERT INTO Naves (nombre, costo_metal, costo_cristal, costo_energia) VALUES
 ('Caza Estelar', 100, 50, 30),
 ('Destructor Interplanetario', 200, 100, 150),
 ('Nave de Colonización', 150, 80, 100),
@@ -212,14 +212,14 @@ INSERT INTO Recursos (nombre) VALUES
 ('Deuterio'),
 ('Energía');
 
-INSERT INTO Armamentos (nombre, costo_r1, costo_r2, costo_r3) VALUES
+INSERT INTO Armamentos (nombre, costo_metal, costo_cristal, costo_energia) VALUES
 ('Cañón de Plasma', 150, 100, 80),
 ('Torreta de Defensa', 100, 80, 120),
 ('Láser de Precisión', 120, 150, 100),
 ('Bomba de Neutrinos', 80, 120, 150),
 ('Escudo de Energía', 100, 150, 80);
 
-INSERT INTO Edificios (nombre, costo_r1, costo_r2, costo_r3) VALUES
+INSERT INTO Edificios (nombre, costo_metal, costo_cristal, costo_energia) VALUES
 ('Centro de Investigación', 500, 200, 300),
 ('Hangar de Naves', 300, 400, 200),
 ('Planta de Energía Solar', 200, 300, 500),
@@ -310,12 +310,14 @@ WHERE NOT EXISTS (
 );
 
 -- 5) Defensa Planetaria para galactic_ruler (subconsulta + verificación)
-INSERT INTO Planetas_Edificios (planeta_id, edificio_id, nivel)
-SELECT p.id, e.id, 1
+INSERT INTO Planetas_Edificios (planeta_id, edificio_id)
+SELECT p.id, e.id
 FROM Planetas p
-JOIN Jugadores j ON j.id = p.jugador_id
-JOIN Edificios e ON e.nombre = 'Defensa Planetaria'
+JOIN Jugadores j ON p.jugador_id = j.id
+CROSS JOIN Edificios e
 WHERE j.username = 'galactic_ruler'
+  AND p.nombre = 'Stellar Haven'
+  AND e.nombre = 'Defensa Planetaria'
   AND NOT EXISTS (
       SELECT 1
       FROM Planetas_Edificios pe
