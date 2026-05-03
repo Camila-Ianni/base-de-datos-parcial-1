@@ -3,7 +3,7 @@
 CREATE DATABASE IF NOT EXISTS Imperio;
 USE Imperio;
 
-DROP TABLE IF EXISTS Planeta_Armamentos;
+DROP TABLE IF EXISTS Planetas_Armamentos;
 DROP TABLE IF EXISTS Planetas_Edificios;
 DROP TABLE IF EXISTS Planetas_Naves;
 DROP TABLE IF EXISTS Planetas_Recursos;
@@ -33,8 +33,8 @@ CREATE TABLE Galaxias (
 CREATE TABLE Planetas (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
-    coordenada_x INT NOT NULL,
-    coordenada_y INT NOT NULL,
+    coordenadaX INT NOT NULL,
+    coordenadaY INT NOT NULL,
     superficie INT NOT NULL,
     galaxia_id INT NOT NULL,
     jugador_id INT NOT NULL,
@@ -50,25 +50,25 @@ CREATE TABLE Recursos (
 CREATE TABLE Naves (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
-    costo_r1 INT NOT NULL,
-    costo_r2 INT NOT NULL,
-    costo_r3 INT NOT NULL
+    costo_metal INT NOT NULL,
+    costo_cristal INT NOT NULL,
+    costo_deuterio INT NOT NULL
 );
 
 CREATE TABLE Armamentos (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
-    costo_r1 INT NOT NULL,
-    costo_r2 INT NOT NULL,
-    costo_r3 INT NOT NULL
+    costo_metal INT NOT NULL,
+    costo_cristal INT NOT NULL,
+    costo_deuterio INT NOT NULL
 );
 
 CREATE TABLE Edificios (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(120) NOT NULL,
-    costo_r1 INT NOT NULL,
-    costo_r2 INT NOT NULL,
-    costo_r3 INT NOT NULL
+    costo_metal INT NOT NULL,
+    costo_cristal INT NOT NULL,
+    costo_deuterio INT NOT NULL
 );
 
 CREATE TABLE Lunas (
@@ -106,7 +106,7 @@ CREATE TABLE Planetas_Edificios (
     FOREIGN KEY (edificio_id) REFERENCES Edificios(id)
 );
 
-CREATE TABLE Planeta_Armamentos (
+CREATE TABLE Planetas_Armamentos (
     planeta_id INT NOT NULL,
     armamento_id INT NOT NULL,
     cantidad INT NOT NULL,
@@ -131,7 +131,7 @@ INSERT INTO Galaxias (nombre, sector) VALUES
 ('Orion', 'Delta'),
 ('Centaurus', 'Epsilon');
 
-INSERT INTO Planetas (nombre, coordenada_x, coordenada_y, superficie, galaxia_id, jugador_id) VALUES
+INSERT INTO Planetas (nombre, coordenadaX, coordenadaY, superficie, galaxia_id, jugador_id) VALUES
 (
     'Nova Prime', 10, 20, 108728,
     (SELECT id FROM Galaxias WHERE nombre = 'Milky Way'),
@@ -200,7 +200,7 @@ INSERT INTO Lunas (nombre, superficie, planeta_id) VALUES
 ('StellarDust II', 2033, 9),
 ('MoonlightGrove II', 1578, 10);
 
-INSERT INTO Naves (nombre, costo_r1, costo_r2, costo_r3) VALUES
+INSERT INTO Naves (nombre, costo_metal, costo_cristal, costo_deuterio) VALUES
 ('Caza Estelar', 100, 50, 30),
 ('Destructor Interplanetario', 200, 100, 150),
 ('Nave de Colonización', 150, 80, 100),
@@ -212,14 +212,14 @@ INSERT INTO Recursos (nombre) VALUES
 ('Deuterio'),
 ('Energía');
 
-INSERT INTO Armamentos (nombre, costo_r1, costo_r2, costo_r3) VALUES
+INSERT INTO Armamentos (nombre, costo_metal, costo_cristal, costo_deuterio) VALUES
 ('Cañón de Plasma', 150, 100, 80),
 ('Torreta de Defensa', 100, 80, 120),
 ('Láser de Precisión', 120, 150, 100),
 ('Bomba de Neutrinos', 80, 120, 150),
 ('Escudo de Energía', 100, 150, 80);
 
-INSERT INTO Edificios (nombre, costo_r1, costo_r2, costo_r3) VALUES
+INSERT INTO Edificios (nombre, costo_metal, costo_cristal, costo_deuterio) VALUES
 ('Centro de Investigación', 500, 200, 300),
 ('Hangar de Naves', 300, 400, 200),
 ('Planta de Energía Solar', 200, 300, 500),
