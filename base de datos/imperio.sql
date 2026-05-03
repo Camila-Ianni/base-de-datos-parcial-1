@@ -15,7 +15,6 @@ DROP TABLE IF EXISTS Recursos;
 DROP TABLE IF EXISTS Planetas;
 DROP TABLE IF EXISTS Galaxias;
 DROP TABLE IF EXISTS Jugadores;
-DROP TABLE IF EXISTS Jugadores_Planetas;
 
 CREATE TABLE Jugadores (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -133,16 +132,56 @@ INSERT INTO Galaxias (nombre, sector) VALUES
 ('Centaurus', 'Epsilon');
 
 INSERT INTO Planetas (nombre, coordenada_x, coordenada_y, superficie, galaxia_id, jugador_id) VALUES
-('Nova Prime', 10, 20, 108728, 1, 1),
-('Stellar Haven', 15, 25, 4884, 2, 2),
-('Astral Oasis', 8, 30, 142984, 1, 1),
-('Celestial Outpost', 12, 18, 9452, 3, 4),
-('Galactic Citadel', 25, 15, 51118, 4, 5),
-('Starlight Sanctuary', 5, 12, 7534, 1, 1),
-('Celestial Outpost II', 18, 22, 49532, 2, 2),
-('Nebula Nexus', 30, 8, 6794, 3, 3),
-('Solar Haven', 10, 30, 12756, 1, 6),
-('Asteroid Haven', 22, 17, 12104, 4, 4);
+(
+    'Nova Prime', 10, 20, 108728,
+    (SELECT id FROM Galaxias WHERE nombre = 'Milky Way'),
+    (SELECT id FROM Jugadores WHERE username = 'astro_gamer')
+),
+(
+    'Stellar Haven', 15, 25, 4884,
+    (SELECT id FROM Galaxias WHERE nombre = 'Andromeda'),
+    (SELECT id FROM Jugadores WHERE username = 'galactic_ruler')
+),
+(
+    'Astral Oasis', 8, 30, 142984,
+    (SELECT id FROM Galaxias WHERE nombre = 'Milky Way'),
+    (SELECT id FROM Jugadores WHERE username = 'astro_gamer')
+),
+(
+    'Celestial Outpost', 12, 18, 9452,
+    (SELECT id FROM Galaxias WHERE nombre = 'Pegasus'),
+    (SELECT id FROM Jugadores WHERE username = 'space_commander')
+),
+(
+    'Galactic Citadel', 25, 15, 51118,
+    (SELECT id FROM Galaxias WHERE nombre = 'Orion'),
+    (SELECT id FROM Jugadores WHERE username = 'stargazer')
+),
+(
+    'Starlight Sanctuary', 5, 12, 7534,
+    (SELECT id FROM Galaxias WHERE nombre = 'Milky Way'),
+    (SELECT id FROM Jugadores WHERE username = 'astro_gamer')
+),
+(
+    'Celestial Outpost II', 18, 22, 49532,
+    (SELECT id FROM Galaxias WHERE nombre = 'Andromeda'),
+    (SELECT id FROM Jugadores WHERE username = 'galactic_ruler')
+),
+(
+    'Nebula Nexus', 30, 8, 6794,
+    (SELECT id FROM Galaxias WHERE nombre = 'Pegasus'),
+    (SELECT id FROM Jugadores WHERE username = 'cosmic_explorer')
+),
+(
+    'Solar Haven', 10, 30, 12756,
+    (SELECT id FROM Galaxias WHERE nombre = 'Milky Way'),
+    (SELECT id FROM Jugadores WHERE username = 'space_pioneer')
+),
+(
+    'Asteroid Haven', 22, 17, 12104,
+    (SELECT id FROM Galaxias WHERE nombre = 'Orion'),
+    (SELECT id FROM Jugadores WHERE username = 'space_commander')
+);
 
 INSERT INTO Lunas (nombre, superficie, planeta_id) VALUES
 ('Luminara', 1524, 1),
@@ -271,8 +310,8 @@ WHERE NOT EXISTS (
 );
 
 -- 5) Defensa Planetaria para galactic_ruler (subconsulta + verificación)
-INSERT INTO Planetas_Edificios (planeta_id, edificio_id)
-SELECT p.id, e.id
+INSERT INTO Planetas_Edificios (planeta_id, edificio_id, nivel)
+SELECT p.id, e.id, 1
 FROM Planetas p
 JOIN Jugadores j ON j.id = p.jugador_id
 JOIN Edificios e ON e.nombre = 'Defensa Planetaria'
