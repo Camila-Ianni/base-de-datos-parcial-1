@@ -4,15 +4,15 @@
 - Diagrama validado y listo para render.
 
 **Relaciones clave (basadas en `base de datos/imperio.sql`):**
-- `Planetas.galaxia_id` -> 1:N `Galaxias` → `GALAXIAS ||--o{ PLANETAS`.
-- `Jugadores_Planetas` es una tabla pivote m:n entre `Jugadores` y `Planetas` (PK compuesto).
-- Pivotes con atributos: `Planetas_Recursos(cantidad)`, `Planetas_Naves(cantidad)`, `Planeta_Armamentos(cantidad)`.
-- `Lunas` referencia `Planetas` (1:N).
+- `Planetas.id_galaxia` -> 1:N `Galaxias` → `GALAXIAS ||--o{ PLANETAS`.
+- `Planetas.jugador_id` -> 1:N `Jugadores` → `JUGADORES ||--o{ PLANETAS` (sin tabla pivote de jugadores/planetas).
+- `Lunas.planeta_id` -> 1:N `Planetas`.
+- Pivotes N:M: `Planetas_Recursos(cantidad)`, `Planetas_Naves(cantidad)`, `Planetas_Edificios(nivel)`, `Planetas_Armamentos(cantidad)`.
 
 **Notas importantes**
-- `Jugadores_Planetas` es la única relación jugador↔planeta en el modelo actual.
-- `Planetas_Edificios` no tiene atributos extra; solo registra existencia.
-- Naves, Armamentos y Edificios incluyen costos (`costo_r1`, `costo_r2`, `costo_r3`).
+- No existe `Jugadores_Planetas`; la relación jugador↔planeta es directa con FK en `Planetas`.
+- `Planetas_Edificios` incluye `nivel`.
+- Naves, Armamentos y Edificios incluyen costos (`costo_metal`, `costo_cristal`, `costo_energia`).
 
 **Cómo generar `DER.png` localmente**
 

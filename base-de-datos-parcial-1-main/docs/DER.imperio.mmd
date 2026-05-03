@@ -1,5 +1,4 @@
-%% Diagrama Entidad-Relación del proyecto "Imperio" (extraído de base de datos/imperio.sql)
-%% Archivo generado automáticamente por el asistente
+%% Diagrama Entidad-Relación del proyecto "Imperio" (sincronizado con base de datos/imperio.sql)
 
 erDiagram
     JUGADORES {
@@ -9,67 +8,23 @@ erDiagram
         VARCHAR password
         DATE fecha_registro
     }
+
     GALAXIAS {
         INT id PK
         VARCHAR nombre
         VARCHAR sector
     }
+
     PLANETAS {
         INT id PK
         VARCHAR nombre
-        INT coordenada_x
-        INT coordenada_y
+        INT coordenadaX
+        INT coordenadaY
         INT superficie
-        INT galaxia_id FK
-    }
-    JUGADORES_PLANETAS {
+        INT id_galaxia FK
         INT jugador_id FK
-        INT planeta_id FK
     }
-    RECURSOS {
-        INT id PK
-        VARCHAR nombre
-    }
-    PLANETAS_RECURSOS {
-        INT planeta_id FK
-        INT recurso_id FK
-        INT cantidad
-    }
-    NAVES {
-        INT id PK
-        VARCHAR nombre
-        INT costo_r1
-        INT costo_r2
-        INT costo_r3
-    }
-    PLANETAS_NAVES {
-        INT planeta_id FK
-        INT nave_id FK
-        INT cantidad
-    }
-    EDIFICIOS {
-        INT id PK
-        VARCHAR nombre
-        INT costo_r1
-        INT costo_r2
-        INT costo_r3
-    }
-    PLANETAS_EDIFICIOS {
-        INT planeta_id FK
-        INT edificio_id FK
-    }
-    ARMAMENTOS {
-        INT id PK
-        VARCHAR nombre
-        INT costo_r1
-        INT costo_r2
-        INT costo_r3
-    }
-    PLANETA_ARMAMENTOS {
-        INT planeta_id FK
-        INT armamento_id FK
-        INT cantidad
-    }
+
     LUNAS {
         INT id PK
         VARCHAR nombre
@@ -77,19 +32,71 @@ erDiagram
         INT planeta_id FK
     }
 
-    GALAXIAS ||--o{ PLANETAS : "contiene"
-    JUGADORES ||--o{ JUGADORES_PLANETAS : "asigna"
-    PLANETAS ||--o{ JUGADORES_PLANETAS : "asignado_en"
+    RECURSOS {
+        INT id PK
+        VARCHAR nombre
+    }
 
+    NAVES {
+        INT id PK
+        VARCHAR nombre
+        INT costo_metal
+        INT costo_cristal
+        INT costo_energia
+    }
+
+    EDIFICIOS {
+        INT id PK
+        VARCHAR nombre
+        INT costo_metal
+        INT costo_cristal
+        INT costo_energia
+    }
+
+    ARMAMENTOS {
+        INT id PK
+        VARCHAR nombre
+        INT costo_metal
+        INT costo_cristal
+        INT costo_energia
+    }
+
+    PLANETAS_RECURSOS {
+        INT planeta_id FK
+        INT recurso_id FK
+        INT cantidad
+    }
+
+    PLANETAS_NAVES {
+        INT planeta_id FK
+        INT nave_id FK
+        INT cantidad
+    }
+
+    PLANETAS_EDIFICIOS {
+        INT planeta_id FK
+        INT edificio_id FK
+        INT nivel
+    }
+
+    PLANETAS_ARMAMENTOS {
+        INT planeta_id FK
+        INT armamento_id FK
+        INT cantidad
+    }
+
+    GALAXIAS ||--o{ PLANETAS : "contiene"
+    JUGADORES ||--o{ PLANETAS : "posee"
     PLANETAS ||--o{ LUNAS : "tiene"
-    PLANETAS ||--o{ PLANETAS_RECURSOS : "registra"
-    RECURSOS ||--o{ PLANETAS_RECURSOS : "es_tipo_de"
+
+    PLANETAS ||--o{ PLANETAS_RECURSOS : "tiene"
+    RECURSOS ||--o{ PLANETAS_RECURSOS : "asignado"
 
     PLANETAS ||--o{ PLANETAS_NAVES : "alberga"
-    NAVES ||--o{ PLANETAS_NAVES : "desplegada_en"
+    NAVES ||--o{ PLANETAS_NAVES : "desplegada"
 
-    PLANETAS ||--o{ PLANETAS_EDIFICIOS : "posee"
-    EDIFICIOS ||--o{ PLANETAS_EDIFICIOS : "es_tipo_de"
+    PLANETAS ||--o{ PLANETAS_EDIFICIOS : "construye"
+    EDIFICIOS ||--o{ PLANETAS_EDIFICIOS : "instalado"
 
-    PLANETAS ||--o{ PLANETA_ARMAMENTOS : "instala"
-    ARMAMENTOS ||--o{ PLANETA_ARMAMENTOS : "es_tipo_de"
+    PLANETAS ||--o{ PLANETAS_ARMAMENTOS : "instala"
+    ARMAMENTOS ||--o{ PLANETAS_ARMAMENTOS : "equipado"
