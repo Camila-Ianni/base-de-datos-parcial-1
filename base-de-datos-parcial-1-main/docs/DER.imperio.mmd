@@ -85,18 +85,18 @@ erDiagram
         INT cantidad
     }
 
-    GALAXIAS ||--o{ PLANETAS : "contiene"
-    JUGADORES ||--o{ PLANETAS : "posee"
-    PLANETAS ||--o{ LUNAS : "tiene"
+    GALAXIAS ||--|{ PLANETAS : "contiene"
+    JUGADORES ||--|{ PLANETAS : "posee"
+    PLANETAS ||--|{ LUNAS : "tiene"
 
-    PLANETAS ||--o{ PLANETAS_RECURSOS : "tiene"
-    RECURSOS ||--o{ PLANETAS_RECURSOS : "asignado"
+    PLANETAS ||--|{ PLANETAS_RECURSOS : "tiene"
+    RECURSOS ||--|{ PLANETAS_RECURSOS : "asignado"
 
-    PLANETAS ||--o{ PLANETAS_NAVES : "alberga"
-    NAVES ||--o{ PLANETAS_NAVES : "desplegada"
+    PLANETAS ||--|{ PLANETAS_NAVES : "alberga"
+    NAVES ||--|{ PLANETAS_NAVES : "desplegada"
 
-    PLANETAS ||--o{ PLANETAS_EDIFICIOS : "construye"
-    EDIFICIOS ||--o{ PLANETAS_EDIFICIOS : "instalado"
+    PLANETAS ||--|{ PLANETAS_EDIFICIOS : "construye"
+    EDIFICIOS ||--|{ PLANETAS_EDIFICIOS : "instalado"
 
-    PLANETAS ||--o{ PLANETAS_ARMAMENTOS : "instala"
-    ARMAMENTOS ||--o{ PLANETAS_ARMAMENTOS : "equipado"
+    PLANETAS ||--|{ PLANETAS_ARMAMENTOS : "instala"
+    ARMAMENTOS ||--|{ PLANETAS_ARMAMENTOS : "equipado"

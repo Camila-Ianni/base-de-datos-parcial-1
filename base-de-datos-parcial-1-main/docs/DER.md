@@ -6,8 +6,8 @@
 - Modelo lógico con PK/FK marcadas: `docs/Modelo_Logico.png`
 
 **Relaciones clave (basadas en `base de datos/imperio.sql`):**
-- `Planetas.id_galaxia` -> 1:N `Galaxias` → `GALAXIAS ||--o{ PLANETAS`.
-- `Planetas.jugador_id` -> 1:N `Jugadores` → `JUGADORES ||--o{ PLANETAS` (sin tabla pivote de jugadores/planetas).
+- `Planetas.id_galaxia` -> 1:N `Galaxias` → `GALAXIAS ||--|{ PLANETAS`.
+- `Planetas.jugador_id` -> 1:N `Jugadores` → `JUGADORES ||--|{ PLANETAS` (sin tabla pivote de jugadores/planetas).
 - `Lunas.planeta_id` -> 1:N `Planetas`.
 - Pivotes N:M: `Planetas_Recursos(cantidad)`, `Planetas_Naves(cantidad)`, `Planetas_Edificios(nivel)`, `Planetas_Armamentos(cantidad)`.
 
@@ -15,6 +15,7 @@
 - No existe `Jugadores_Planetas`; la relación jugador↔planeta es directa con FK en `Planetas`.
 - `Planetas_Edificios` incluye `nivel`.
 - Naves, Armamentos y Edificios incluyen costos (`costo_metal`, `costo_cristal`, `costo_energia`).
+- En el DER gráfico se usa cardinalidad N:M (sin notación 0,N) para relaciones muchos-a-muchos.
 
 **Cómo generar `DER.png` localmente**
 

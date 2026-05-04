@@ -3,6 +3,12 @@
 CREATE DATABASE IF NOT EXISTS Imperio;
 USE Imperio;
 
+SET FOREIGN_KEY_CHECKS = 0;
+DROP TABLE IF EXISTS Jugadores_Planetas;
+DROP TABLE IF EXISTS Planeta_Armamentos;
+DROP TABLE IF EXISTS Planeta_Edificios;
+DROP TABLE IF EXISTS Planeta_Naves;
+DROP TABLE IF EXISTS Planeta_Recursos;
 DROP TABLE IF EXISTS Planetas_Armamentos;
 DROP TABLE IF EXISTS Planetas_Edificios;
 DROP TABLE IF EXISTS Planetas_Naves;
@@ -15,6 +21,7 @@ DROP TABLE IF EXISTS Recursos;
 DROP TABLE IF EXISTS Planetas;
 DROP TABLE IF EXISTS Galaxias;
 DROP TABLE IF EXISTS Jugadores;
+SET FOREIGN_KEY_CHECKS = 1;
 
 CREATE TABLE Jugadores (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -242,22 +249,37 @@ JOIN Jugadores j ON (
 SET p.jugador_id = j.id;
 
 -- 2) Recursos iniciales para todos los planetas
-INSERT INTO Planetas_Recursos (planeta_id, recurso_id, cantidad)
-SELECT p.id,
-       r.id,
-       CASE r.nombre
-           WHEN 'Metal' THEN 500000
-           WHEN 'Deuterio' THEN 23000
-           WHEN 'Energía' THEN 25000
-           ELSE 0
-       END AS cantidad
-FROM Planetas p
-CROSS JOIN Recursos r
-WHERE NOT EXISTS (
-    SELECT 1
-    FROM Planetas_Recursos pr
-    WHERE pr.planeta_id = p.id AND pr.recurso_id = r.id
-);
+INSERT INTO Planetas_Recursos (planeta_id, recurso_id, cantidad) VALUES
+((SELECT id FROM Planetas WHERE nombre = 'Nova Prime'), (SELECT id FROM Recursos WHERE nombre = 'Metal'), 500000),
+((SELECT id FROM Planetas WHERE nombre = 'Nova Prime'), (SELECT id FROM Recursos WHERE nombre = 'Deuterio'), 23000),
+((SELECT id FROM Planetas WHERE nombre = 'Nova Prime'), (SELECT id FROM Recursos WHERE nombre = 'Energía'), 25000),
+((SELECT id FROM Planetas WHERE nombre = 'Stellar Haven'), (SELECT id FROM Recursos WHERE nombre = 'Metal'), 500000),
+((SELECT id FROM Planetas WHERE nombre = 'Stellar Haven'), (SELECT id FROM Recursos WHERE nombre = 'Deuterio'), 23000),
+((SELECT id FROM Planetas WHERE nombre = 'Stellar Haven'), (SELECT id FROM Recursos WHERE nombre = 'Energía'), 25000),
+((SELECT id FROM Planetas WHERE nombre = 'Astral Oasis'), (SELECT id FROM Recursos WHERE nombre = 'Metal'), 500000),
+((SELECT id FROM Planetas WHERE nombre = 'Astral Oasis'), (SELECT id FROM Recursos WHERE nombre = 'Deuterio'), 23000),
+((SELECT id FROM Planetas WHERE nombre = 'Astral Oasis'), (SELECT id FROM Recursos WHERE nombre = 'Energía'), 25000),
+((SELECT id FROM Planetas WHERE nombre = 'Celestial Outpost'), (SELECT id FROM Recursos WHERE nombre = 'Metal'), 500000),
+((SELECT id FROM Planetas WHERE nombre = 'Celestial Outpost'), (SELECT id FROM Recursos WHERE nombre = 'Deuterio'), 23000),
+((SELECT id FROM Planetas WHERE nombre = 'Celestial Outpost'), (SELECT id FROM Recursos WHERE nombre = 'Energía'), 25000),
+((SELECT id FROM Planetas WHERE nombre = 'Galactic Citadel'), (SELECT id FROM Recursos WHERE nombre = 'Metal'), 500000),
+((SELECT id FROM Planetas WHERE nombre = 'Galactic Citadel'), (SELECT id FROM Recursos WHERE nombre = 'Deuterio'), 23000),
+((SELECT id FROM Planetas WHERE nombre = 'Galactic Citadel'), (SELECT id FROM Recursos WHERE nombre = 'Energía'), 25000),
+((SELECT id FROM Planetas WHERE nombre = 'Starlight Sanctuary'), (SELECT id FROM Recursos WHERE nombre = 'Metal'), 500000),
+((SELECT id FROM Planetas WHERE nombre = 'Starlight Sanctuary'), (SELECT id FROM Recursos WHERE nombre = 'Deuterio'), 23000),
+((SELECT id FROM Planetas WHERE nombre = 'Starlight Sanctuary'), (SELECT id FROM Recursos WHERE nombre = 'Energía'), 25000),
+((SELECT id FROM Planetas WHERE nombre = 'Celestial Outpost II'), (SELECT id FROM Recursos WHERE nombre = 'Metal'), 500000),
+((SELECT id FROM Planetas WHERE nombre = 'Celestial Outpost II'), (SELECT id FROM Recursos WHERE nombre = 'Deuterio'), 23000),
+((SELECT id FROM Planetas WHERE nombre = 'Celestial Outpost II'), (SELECT id FROM Recursos WHERE nombre = 'Energía'), 25000),
+((SELECT id FROM Planetas WHERE nombre = 'Nebula Nexus'), (SELECT id FROM Recursos WHERE nombre = 'Metal'), 500000),
+((SELECT id FROM Planetas WHERE nombre = 'Nebula Nexus'), (SELECT id FROM Recursos WHERE nombre = 'Deuterio'), 23000),
+((SELECT id FROM Planetas WHERE nombre = 'Nebula Nexus'), (SELECT id FROM Recursos WHERE nombre = 'Energía'), 25000),
+((SELECT id FROM Planetas WHERE nombre = 'Solar Haven'), (SELECT id FROM Recursos WHERE nombre = 'Metal'), 500000),
+((SELECT id FROM Planetas WHERE nombre = 'Solar Haven'), (SELECT id FROM Recursos WHERE nombre = 'Deuterio'), 23000),
+((SELECT id FROM Planetas WHERE nombre = 'Solar Haven'), (SELECT id FROM Recursos WHERE nombre = 'Energía'), 25000),
+((SELECT id FROM Planetas WHERE nombre = 'Asteroid Haven'), (SELECT id FROM Recursos WHERE nombre = 'Metal'), 500000),
+((SELECT id FROM Planetas WHERE nombre = 'Asteroid Haven'), (SELECT id FROM Recursos WHERE nombre = 'Deuterio'), 23000),
+((SELECT id FROM Planetas WHERE nombre = 'Asteroid Haven'), (SELECT id FROM Recursos WHERE nombre = 'Energía'), 25000);
 
 -- 3) Asignación de edificios por planeta
 INSERT INTO Planetas_Edificios (planeta_id, edificio_id)
@@ -282,44 +304,31 @@ WHERE NOT EXISTS (
 );
 
 -- 4) Asignación de naves
-INSERT INTO Planetas_Naves (planeta_id, nave_id, cantidad)
-SELECT p.id,
-       n.id,
-       CASE
-           WHEN p.nombre = 'Stellar Haven' AND n.nombre = 'Caza Estelar' THEN 50
-           WHEN p.nombre = 'Stellar Haven' AND n.nombre = 'Nave de Colonización' THEN 20
-           WHEN p.nombre = 'Stellar Haven' AND n.nombre = 'Transportador de Recursos' THEN 30
-           WHEN p.nombre = 'Celestial Outpost II' AND n.nombre = 'Destructor Interplanetario' THEN 30
-           WHEN p.nombre = 'Celestial Outpost II' AND n.nombre = 'Nave de Exploración' THEN 15
-           WHEN p.nombre = 'Celestial Outpost II' AND n.nombre = 'Caza Estelar' THEN 25
-           WHEN p.nombre = 'Solar Haven' AND n.nombre = 'Destructor Interplanetario' THEN 20
-           WHEN p.nombre = 'Solar Haven' AND n.nombre = 'Transportador de Recursos' THEN 30
-           WHEN p.nombre = 'Solar Haven' AND n.nombre = 'Nave de Exploración' THEN 10
-           ELSE NULL
-       END AS cantidad
-FROM Planetas p
-JOIN Naves n ON (
-    (p.nombre = 'Stellar Haven' AND n.nombre IN ('Caza Estelar', 'Nave de Colonización', 'Transportador de Recursos'))
-    OR (p.nombre = 'Celestial Outpost II' AND n.nombre IN ('Destructor Interplanetario', 'Nave de Exploración', 'Caza Estelar'))
-    OR (p.nombre = 'Solar Haven' AND n.nombre IN ('Destructor Interplanetario', 'Transportador de Recursos', 'Nave de Exploración'))
-)
-WHERE NOT EXISTS (
-    SELECT 1
-    FROM Planetas_Naves pn
-    WHERE pn.planeta_id = p.id AND pn.nave_id = n.id
-);
+INSERT INTO Planetas_Naves (planeta_id, nave_id, cantidad) VALUES
+((SELECT id FROM Planetas WHERE nombre = 'Stellar Haven'), (SELECT id FROM Naves WHERE nombre = 'Caza Estelar'), 50),
+((SELECT id FROM Planetas WHERE nombre = 'Stellar Haven'), (SELECT id FROM Naves WHERE nombre = 'Nave de Colonización'), 20),
+((SELECT id FROM Planetas WHERE nombre = 'Stellar Haven'), (SELECT id FROM Naves WHERE nombre = 'Transportador de Recursos'), 30),
+((SELECT id FROM Planetas WHERE nombre = 'Celestial Outpost II'), (SELECT id FROM Naves WHERE nombre = 'Destructor Interplanetario'), 30),
+((SELECT id FROM Planetas WHERE nombre = 'Celestial Outpost II'), (SELECT id FROM Naves WHERE nombre = 'Nave de Exploración'), 15),
+((SELECT id FROM Planetas WHERE nombre = 'Celestial Outpost II'), (SELECT id FROM Naves WHERE nombre = 'Caza Estelar'), 25),
+((SELECT id FROM Planetas WHERE nombre = 'Solar Haven'), (SELECT id FROM Naves WHERE nombre = 'Destructor Interplanetario'), 20),
+((SELECT id FROM Planetas WHERE nombre = 'Solar Haven'), (SELECT id FROM Naves WHERE nombre = 'Transportador de Recursos'), 30),
+((SELECT id FROM Planetas WHERE nombre = 'Solar Haven'), (SELECT id FROM Naves WHERE nombre = 'Nave de Exploración'), 10);
 
 -- 5) Defensa Planetaria para galactic_ruler (subconsulta + verificación)
 INSERT INTO Planetas_Edificios (planeta_id, edificio_id)
-SELECT p.id, e.id
-FROM Planetas p
-JOIN Jugadores j ON p.jugador_id = j.id
-CROSS JOIN Edificios e
-WHERE j.username = 'galactic_ruler'
-  AND p.nombre = 'Stellar Haven'
-  AND e.nombre = 'Defensa Planetaria'
+SELECT
+    (SELECT id FROM Planetas WHERE nombre = 'Stellar Haven') AS planeta_id,
+    (SELECT id FROM Edificios WHERE nombre = 'Defensa Planetaria') AS edificio_id
+WHERE EXISTS (
+      SELECT 1
+      FROM Planetas p
+      WHERE p.nombre = 'Stellar Haven'
+        AND p.jugador_id = (SELECT id FROM Jugadores WHERE username = 'galactic_ruler')
+  )
   AND NOT EXISTS (
       SELECT 1
       FROM Planetas_Edificios pe
-      WHERE pe.planeta_id = p.id AND pe.edificio_id = e.id
+      WHERE pe.planeta_id = (SELECT id FROM Planetas WHERE nombre = 'Stellar Haven')
+        AND pe.edificio_id = (SELECT id FROM Edificios WHERE nombre = 'Defensa Planetaria')
   );
