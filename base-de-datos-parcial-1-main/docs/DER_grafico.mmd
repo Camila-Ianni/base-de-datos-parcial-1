@@ -1,0 +1,38 @@
+flowchart LR
+    J[Jugadores]
+    G[Galaxias]
+    P[Planetas]
+    L[Lunas]
+    R[Recursos]
+    N[Naves]
+    E[Edificios]
+    A[Armamentos]
+
+    RG{contiene}
+    RJ{posee}
+    RL{tiene}
+    RR{tiene}
+    RN{alberga}
+    RE{construye}
+    RA{instala}
+
+    G -- "1" --> RG
+    RG -- "N" --> P
+
+    J -- "1" --> RJ
+    RJ -- "N" --> P
+
+    P -- "1" --> RL
+    RL -- "N" --> L
+
+    P -- "N" --> RR
+    RR -- "M" --> R
+
+    P -- "N" --> RN
+    RN -- "M" --> N
+
+    P -- "N" --> RE
+    RE -- "M" --> E
+
+    P -- "N" --> RA
+    RA -- "M" --> A

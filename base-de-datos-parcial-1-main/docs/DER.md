@@ -2,6 +2,8 @@
 
 - Archivo mermaid: `docs/DER.imperio.mmd`
 - Diagrama validado y listo para render.
+- DER gráfico para entrega (rombos y rectángulos): `docs/DER_grafico.png`
+- Modelo lógico con PK/FK marcadas: `docs/Modelo_Logico.png`
 
 **Relaciones clave (basadas en `base de datos/imperio.sql`):**
 - `Planetas.id_galaxia` -> 1:N `Galaxias` → `GALAXIAS ||--o{ PLANETAS`.

@@ -1,0 +1,88 @@
+flowchart TB
+    J["Jugadores
+PK id
+username
+email
+password
+fecha_registro"]
+
+    G["Galaxias
+PK id
+nombre
+sector"]
+
+    P["Planetas
+PK id
+nombre
+coordenadaX
+coordenadaY
+superficie
+FK id_galaxia -> Galaxias.id
+FK jugador_id -> Jugadores.id"]
+
+    L["Lunas
+PK id
+nombre
+superficie
+FK planeta_id -> Planetas.id"]
+
+    R["Recursos
+PK id
+nombre"]
+
+    N["Naves
+PK id
+nombre
+costo_metal
+costo_cristal
+costo_energia"]
+
+    E["Edificios
+PK id
+nombre
+costo_metal
+costo_cristal
+costo_energia"]
+
+    A["Armamentos
+PK id
+nombre
+costo_metal
+costo_cristal
+costo_energia"]
+
+    PR["Planetas_Recursos
+PK/FK planeta_id -> Planetas.id
+PK/FK recurso_id -> Recursos.id
+cantidad"]
+
+    PN["Planetas_Naves
+PK/FK planeta_id -> Planetas.id
+PK/FK nave_id -> Naves.id
+cantidad"]
+
+    PE["Planetas_Edificios
+PK/FK planeta_id -> Planetas.id
+PK/FK edificio_id -> Edificios.id
+nivel"]
+
+    PA["Planetas_Armamentos
+PK/FK planeta_id -> Planetas.id
+PK/FK armamento_id -> Armamentos.id
+cantidad"]
+
+    G --> P
+    J --> P
+    P --> L
+
+    P --> PR
+    R --> PR
+
+    P --> PN
+    N --> PN
+
+    P --> PE
+    E --> PE
+
+    P --> PA
+    A --> PA
