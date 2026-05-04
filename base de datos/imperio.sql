@@ -331,20 +331,24 @@ INSERT INTO Planetas_Naves (planeta_id, nave_id, cantidad) VALUES
 ((SELECT id FROM Planetas WHERE nombre = 'Solar Haven'), (SELECT id FROM Naves WHERE nombre = 'Transportador de Recursos'), 30),
 ((SELECT id FROM Planetas WHERE nombre = 'Solar Haven'), (SELECT id FROM Naves WHERE nombre = 'Nave de Exploración'), 10);
 
--- 5) Defensa Planetaria para galactic_ruler (subconsulta + verificación)
+-- 5) Insertar edificio id=4 (Defensa Planetaria) en TODOS los planetas del usuario 'galactic_ruler'
+-- Objetivo: Insertar en los planetas id=2 (Stellar Haven) e id=7 (Celestial Outpost II)
+-- Método: WHERE NOT EXISTS para evitar duplicados
+-- CORRECCIÓN PUNTO 5 - PARTE 3
+
+-- Inserción en planeta id=2 (Stellar Haven)
 INSERT INTO Planetas_Edificios (planeta_id, edificio_id)
-SELECT
-    (SELECT id FROM Planetas WHERE nombre = 'Stellar Haven') AS planeta_id,
-    (SELECT id FROM Edificios WHERE nombre = 'Defensa Planetaria') AS edificio_id
-WHERE EXISTS (
-      SELECT 1
-      FROM Planetas p
-      WHERE p.nombre = 'Stellar Haven'
-        AND p.jugador_id = (SELECT id FROM Jugadores WHERE username = 'galactic_ruler')
-  )
-  AND NOT EXISTS (
-      SELECT 1
-      FROM Planetas_Edificios pe
-      WHERE pe.planeta_id = (SELECT id FROM Planetas WHERE nombre = 'Stellar Haven')
-        AND pe.edificio_id = (SELECT id FROM Edificios WHERE nombre = 'Defensa Planetaria')
-  );
+SELECT 2, 4
+WHERE NOT EXISTS (
+    SELECT 1 FROM Planetas_Edificios 
+    WHERE planeta_id = 2 AND edificio_id = 4
+);
+
+-- Inserción en planeta id=7 (Celestial Outpost II)
+INSERT INTO Planetas_Edificios (planeta_id, edificio_id)
+SELECT 7, 4
+WHERE NOT EXISTS (
+    SELECT 1 FROM Planetas_Edificios 
+    WHERE planeta_id = 7 AND edificio_id = 4
+);
+
