@@ -1,4 +1,4 @@
--- Script SQL generado para cumplir con las consignas del parcial
+
 
 CREATE DATABASE IF NOT EXISTS Imperio;
 USE Imperio;
