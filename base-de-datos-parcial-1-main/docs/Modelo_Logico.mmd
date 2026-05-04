@@ -1,74 +1,74 @@
 flowchart TB
     J["Jugadores
-PK id
+PK <u>id</u>
 username
 email
 password
 fecha_registro"]
 
     G["Galaxias
-PK id
+PK <u>id</u>
 nombre
 sector"]
 
     P["Planetas
-PK id
+PK <u>id</u>
 nombre
 coordenadaX
 coordenadaY
 superficie
-FK id_galaxia -> Galaxias.id
-FK jugador_id -> Jugadores.id"]
+FK id_galaxia -> <u>Galaxias.id</u>
+FK jugador_id -> <u>Jugadores.id</u>"]
 
     L["Lunas
-PK id
+PK <u>id</u>
 nombre
 superficie
-FK planeta_id -> Planetas.id"]
+FK planeta_id -> <u>Planetas.id</u>"]
 
     R["Recursos
-PK id
+PK <u>id</u>
 nombre"]
 
     N["Naves
-PK id
+PK <u>id</u>
 nombre
 costo_metal
 costo_cristal
 costo_energia"]
 
     E["Edificios
-PK id
+PK <u>id</u>
 nombre
 costo_metal
 costo_cristal
 costo_energia"]
 
     A["Armamentos
-PK id
+PK <u>id</u>
 nombre
 costo_metal
 costo_cristal
 costo_energia"]
 
     PR["Planetas_Recursos
-PK/FK planeta_id -> Planetas.id
-PK/FK recurso_id -> Recursos.id
+PK/FK <u>planeta_id</u> -> <u>Planetas.id</u>
+PK/FK <u>recurso_id</u> -> <u>Recursos.id</u>
 cantidad"]
 
     PN["Planetas_Naves
-PK/FK planeta_id -> Planetas.id
-PK/FK nave_id -> Naves.id
+PK/FK <u>planeta_id</u> -> <u>Planetas.id</u>
+PK/FK <u>nave_id</u> -> <u>Naves.id</u>
 cantidad"]
 
     PE["Planetas_Edificios
-PK/FK planeta_id -> Planetas.id
-PK/FK edificio_id -> Edificios.id
+PK/FK <u>planeta_id</u> -> <u>Planetas.id</u>
+PK/FK <u>edificio_id</u> -> <u>Edificios.id</u>
 nivel"]
 
     PA["Planetas_Armamentos
-PK/FK planeta_id -> Planetas.id
-PK/FK armamento_id -> Armamentos.id
+PK/FK <u>planeta_id</u> -> <u>Planetas.id</u>
+PK/FK <u>armamento_id</u> -> <u>Armamentos.id</u>
 cantidad"]
 
     G --> P

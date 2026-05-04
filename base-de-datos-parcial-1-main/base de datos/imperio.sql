@@ -237,16 +237,29 @@ INSERT INTO Edificios (nombre, costo_metal, costo_cristal, costo_energia) VALUES
 
 -- Parte 3: Querys
 -- 1) Asignación de planetas a jugadores (1:N, sin tabla pivote)
-UPDATE Planetas p
-JOIN Jugadores j ON (
-    (j.username = 'astro_gamer' AND p.nombre IN ('Nova Prime', 'Astral Oasis', 'Starlight Sanctuary'))
-    OR (j.username = 'galactic_ruler' AND p.nombre IN ('Stellar Haven', 'Celestial Outpost II'))
-    OR (j.username = 'cosmic_explorer' AND p.nombre IN ('Nebula Nexus'))
-    OR (j.username = 'space_commander' AND p.nombre IN ('Celestial Outpost', 'Asteroid Haven'))
-    OR (j.username = 'stargazer' AND p.nombre IN ('Galactic Citadel'))
-    OR (j.username = 'space_pioneer' AND p.nombre IN ('Solar Haven'))
-)
-SET p.jugador_id = j.id;
+UPDATE Planetas
+SET jugador_id = (SELECT id FROM Jugadores WHERE username = 'astro_gamer')
+WHERE nombre IN ('Nova Prime', 'Astral Oasis', 'Starlight Sanctuary');
+
+UPDATE Planetas
+SET jugador_id = (SELECT id FROM Jugadores WHERE username = 'galactic_ruler')
+WHERE nombre IN ('Stellar Haven', 'Celestial Outpost II');
+
+UPDATE Planetas
+SET jugador_id = (SELECT id FROM Jugadores WHERE username = 'cosmic_explorer')
+WHERE nombre = 'Nebula Nexus';
+
+UPDATE Planetas
+SET jugador_id = (SELECT id FROM Jugadores WHERE username = 'space_commander')
+WHERE nombre IN ('Celestial Outpost', 'Asteroid Haven');
+
+UPDATE Planetas
+SET jugador_id = (SELECT id FROM Jugadores WHERE username = 'stargazer')
+WHERE nombre = 'Galactic Citadel';
+
+UPDATE Planetas
+SET jugador_id = (SELECT id FROM Jugadores WHERE username = 'space_pioneer')
+WHERE nombre = 'Solar Haven';
 
 -- 2) Recursos iniciales para todos los planetas
 INSERT INTO Planetas_Recursos (planeta_id, recurso_id, cantidad) VALUES
@@ -282,26 +295,29 @@ INSERT INTO Planetas_Recursos (planeta_id, recurso_id, cantidad) VALUES
 ((SELECT id FROM Planetas WHERE nombre = 'Asteroid Haven'), (SELECT id FROM Recursos WHERE nombre = 'Energía'), 25000);
 
 -- 3) Asignación de edificios por planeta
-INSERT INTO Planetas_Edificios (planeta_id, edificio_id)
-SELECT p.id, e.id
-FROM Planetas p
-JOIN Edificios e ON (
-    (p.nombre = 'Nova Prime' AND e.nombre IN ('Centro de Investigación', 'Sintetizador de Deuterio'))
-    OR (p.nombre = 'Stellar Haven' AND e.nombre IN ('Puerto Espacial', 'Hangar de Naves', 'Almacén de Metales'))
-    OR (p.nombre = 'Astral Oasis' AND e.nombre IN ('Planta de Energía Solar', 'Hangar de Naves'))
-    OR (p.nombre = 'Celestial Outpost' AND e.nombre IN ('Defensa Planetaria', 'Planta de Energía Solar'))
-    OR (p.nombre = 'Galactic Citadel' AND e.nombre IN ('Hangar de Naves', 'Centro de Investigación'))
-    OR (p.nombre = 'Starlight Sanctuary' AND e.nombre IN ('Sintetizador de Deuterio', 'Centro de Investigación'))
-    OR (p.nombre = 'Celestial Outpost II' AND e.nombre IN ('Planta de Energía Solar', 'Hangar de Naves'))
-    OR (p.nombre = 'Nebula Nexus' AND e.nombre IN ('Centro de Investigación', 'Almacén de Metales'))
-    OR (p.nombre = 'Solar Haven' AND e.nombre IN ('Sintetizador de Deuterio', 'Puerto Espacial', 'Hangar de Naves'))
-    OR (p.nombre = 'Asteroid Haven' AND e.nombre IN ('Planta de Energía Solar', 'Centro de Investigación'))
-)
-WHERE NOT EXISTS (
-    SELECT 1
-    FROM Planetas_Edificios pe
-    WHERE pe.planeta_id = p.id AND pe.edificio_id = e.id
-);
+INSERT INTO Planetas_Edificios (planeta_id, edificio_id) VALUES
+((SELECT id FROM Planetas WHERE nombre = 'Nova Prime'), (SELECT id FROM Edificios WHERE nombre = 'Centro de Investigación')),
+((SELECT id FROM Planetas WHERE nombre = 'Nova Prime'), (SELECT id FROM Edificios WHERE nombre = 'Sintetizador de Deuterio')),
+((SELECT id FROM Planetas WHERE nombre = 'Stellar Haven'), (SELECT id FROM Edificios WHERE nombre = 'Puerto Espacial')),
+((SELECT id FROM Planetas WHERE nombre = 'Stellar Haven'), (SELECT id FROM Edificios WHERE nombre = 'Hangar de Naves')),
+((SELECT id FROM Planetas WHERE nombre = 'Stellar Haven'), (SELECT id FROM Edificios WHERE nombre = 'Almacén de Metales')),
+((SELECT id FROM Planetas WHERE nombre = 'Astral Oasis'), (SELECT id FROM Edificios WHERE nombre = 'Planta de Energía Solar')),
+((SELECT id FROM Planetas WHERE nombre = 'Astral Oasis'), (SELECT id FROM Edificios WHERE nombre = 'Hangar de Naves')),
+((SELECT id FROM Planetas WHERE nombre = 'Celestial Outpost'), (SELECT id FROM Edificios WHERE nombre = 'Defensa Planetaria')),
+((SELECT id FROM Planetas WHERE nombre = 'Celestial Outpost'), (SELECT id FROM Edificios WHERE nombre = 'Planta de Energía Solar')),
+((SELECT id FROM Planetas WHERE nombre = 'Galactic Citadel'), (SELECT id FROM Edificios WHERE nombre = 'Hangar de Naves')),
+((SELECT id FROM Planetas WHERE nombre = 'Galactic Citadel'), (SELECT id FROM Edificios WHERE nombre = 'Centro de Investigación')),
+((SELECT id FROM Planetas WHERE nombre = 'Starlight Sanctuary'), (SELECT id FROM Edificios WHERE nombre = 'Sintetizador de Deuterio')),
+((SELECT id FROM Planetas WHERE nombre = 'Starlight Sanctuary'), (SELECT id FROM Edificios WHERE nombre = 'Centro de Investigación')),
+((SELECT id FROM Planetas WHERE nombre = 'Celestial Outpost II'), (SELECT id FROM Edificios WHERE nombre = 'Planta de Energía Solar')),
+((SELECT id FROM Planetas WHERE nombre = 'Celestial Outpost II'), (SELECT id FROM Edificios WHERE nombre = 'Hangar de Naves')),
+((SELECT id FROM Planetas WHERE nombre = 'Nebula Nexus'), (SELECT id FROM Edificios WHERE nombre = 'Centro de Investigación')),
+((SELECT id FROM Planetas WHERE nombre = 'Nebula Nexus'), (SELECT id FROM Edificios WHERE nombre = 'Almacén de Metales')),
+((SELECT id FROM Planetas WHERE nombre = 'Solar Haven'), (SELECT id FROM Edificios WHERE nombre = 'Sintetizador de Deuterio')),
+((SELECT id FROM Planetas WHERE nombre = 'Solar Haven'), (SELECT id FROM Edificios WHERE nombre = 'Puerto Espacial')),
+((SELECT id FROM Planetas WHERE nombre = 'Solar Haven'), (SELECT id FROM Edificios WHERE nombre = 'Hangar de Naves')),
+((SELECT id FROM Planetas WHERE nombre = 'Asteroid Haven'), (SELECT id FROM Edificios WHERE nombre = 'Planta de Energía Solar')),
+((SELECT id FROM Planetas WHERE nombre = 'Asteroid Haven'), (SELECT id FROM Edificios WHERE nombre = 'Centro de Investigación'));
 
 -- 4) Asignación de naves
 INSERT INTO Planetas_Naves (planeta_id, nave_id, cantidad) VALUES

@@ -4,6 +4,8 @@
 - Diagrama validado y listo para render.
 - DER gráfico para entrega (rombos y rectángulos): `docs/DER_grafico.png`
 - Modelo lógico con PK/FK marcadas: `docs/Modelo_Logico.png`
+- En el DER gráfico, las N:M se muestran explícitamente como `(n,m)` (sin `(0,n)`).
+- En el modelo lógico, las PK están subrayadas y las FK están indicadas con su referencia.
 
 **Relaciones clave (basadas en `base de datos/imperio.sql`):**
 - `Planetas.id_galaxia` -> 1:N `Galaxias` → `GALAXIAS ||--|{ PLANETAS`.
