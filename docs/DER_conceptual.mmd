@@ -1,17 +1,7 @@
-%% Diagrama Entidad-Relación (D.E.R.) - Proyecto Imperio
-%% Diagrama conceptual: Solo entidades y relaciones (sin tablas intermedias, sin FK)
-%% Este es el verdadero D.E.R. que muestra solo las entidades y sus relaciones conceptuales
+%% DER Conceptual del proyecto "Imperio"
+%% Entidades puras con atributos (sin FK ni tablas intermedias)
 
 erDiagram
-    JUGADORES ||--o{ PLANETAS : "posee"
-    GALAXIAS ||--o{ PLANETAS : "contiene"
-    PLANETAS ||--o{ LUNAS : "tiene"
-    
-    PLANETAS }o--|| RECURSOS : "tiene"
-    PLANETAS }o--|| NAVES : "alberga"
-    PLANETAS }o--|| EDIFICIOS : "construye"
-    PLANETAS }o--|| ARMAMENTOS : "instala"
-
     JUGADORES {
         INT id
         VARCHAR username
@@ -31,12 +21,6 @@ erDiagram
         VARCHAR nombre
         INT coordenadaX
         INT coordenadaY
-        INT superficie
-    }
-
-    LUNAS {
-        INT id
-        VARCHAR nombre
         INT superficie
     }
 
@@ -68,3 +52,17 @@ erDiagram
         INT costo_cristal
         INT costo_energia
     }
+
+    LUNAS {
+        INT id
+        VARCHAR nombre
+        INT superficie
+    }
+
+    GALAXIAS ||--o{ PLANETAS : contiene
+    JUGADORES ||--o{ PLANETAS : posee
+    PLANETAS ||--o{ LUNAS : tiene
+    PLANETAS }o--o{ RECURSOS : explota
+    PLANETAS }o--o{ NAVES : despliega
+    PLANETAS }o--o{ EDIFICIOS : construye
+    PLANETAS }o--o{ ARMAMENTOS : equipa

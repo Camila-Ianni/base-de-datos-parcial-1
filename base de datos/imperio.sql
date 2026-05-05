@@ -351,4 +351,3 @@ WHERE NOT EXISTS (
     SELECT 1 FROM Planetas_Edificios 
     WHERE planeta_id = 7 AND edificio_id = 4
 );
-
